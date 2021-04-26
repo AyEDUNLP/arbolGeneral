@@ -18,17 +18,22 @@ public class ArbolGeneral<T> {
 	}
 
 	public void setHijos(ListaGenerica<ArbolGeneral<T>> hijos) {
-		this.hijos = hijos;
+		if (hijos==null)
+			this.hijos = new ListaEnlazadaGenerica<ArbolGeneral<T>>();
+		else
+			this.hijos = hijos;
 	}
 
 	public ArbolGeneral(T dato) {
 		this.dato = dato;
-		this.hijos = new ListaEnlazadaGenerica<ArbolGeneral<T>>();
 	}
 
 	public ArbolGeneral(T dato, ListaGenerica<ArbolGeneral<T>> hijos) {
 		this(dato);
-		this.hijos = hijos;
+		if (hijos==null)
+			this.hijos = new ListaEnlazadaGenerica<ArbolGeneral<T>>();
+		else
+			this.hijos = hijos;
 	}
 
 	public ListaGenerica<ArbolGeneral<T>> getHijos() {
