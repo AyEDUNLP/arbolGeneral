@@ -1,20 +1,22 @@
-package tp04.ejercicio1;
+package tests;
 
-import static org.junit.jupiter.api.Assertions.*;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import static org.junit.Assert.*;
+
+import org.junit.Before;
+import org.junit.Test;
 
 import tp02.ejercicio2.ListaEnlazadaGenerica;
+import tp04.ejercicio1.ArbolGeneral;
 import utils.ArbolGeneralExamples;
 
 
-class ArbolGeneralTestCase {
+public class ArbolGeneralTestCase {
 	
 	private ArbolGeneral<Integer> ag;
 	
-	@BeforeEach
-	void setUp() throws Exception {
+	@Before
+	public void setUp() throws Exception {
 		
 		/*
 		 *              1
@@ -76,7 +78,7 @@ class ArbolGeneralTestCase {
 	}
 
 	@Test
-	void testPreorder() {
+	public void testPreorder() {
 		//1,2,4,10,15,5,3,6,7,8,12,13,14,11
 		ListaEnlazadaGenerica<Integer> esperado = new ListaEnlazadaGenerica<Integer>();
 		esperado.agregarFinal(1);
@@ -98,7 +100,7 @@ class ArbolGeneralTestCase {
 		assertEquals(esperado, arbol_examples.preorder(this.ag));
 	}
 	@Test
-	void testPostorder() {
+	public void testPostorder() {
 		//15,10,4,5,2,6,,8,12,13,14,7,3,11
 		ListaEnlazadaGenerica<Integer> esperado = new ListaEnlazadaGenerica<Integer>();
 		esperado.agregarFinal(15);
@@ -121,7 +123,7 @@ class ArbolGeneralTestCase {
 	}
 	
 	@Test
-	void testPorNiveles() {
+	public void testPorNiveles() {
 		//1,2,3,11,4,5,6,7,10,8,12,13,14,15
 		ListaEnlazadaGenerica<Integer> esperado = new ListaEnlazadaGenerica<Integer>();
 		esperado.agregarFinal(1);
@@ -144,7 +146,7 @@ class ArbolGeneralTestCase {
 	}
 	
 	@Test
-	void testAltura() {
+	public void testAltura() {
 		ArbolGeneralExamples<Integer> arbol_examples = new ArbolGeneralExamples<Integer>();
 		assertEquals(4, arbol_examples.altura(this.ag));
 	}
