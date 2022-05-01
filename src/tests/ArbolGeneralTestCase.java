@@ -73,8 +73,42 @@ public class ArbolGeneralTestCase {
 		ArbolGeneral<Integer> quince = new ArbolGeneral<Integer>(15);
 		hijos_diez.agregarFinal(quince);
 		diez.setHijos(hijos_diez);
-		
-		
+	}
+	
+	@Test
+	public void testVacio() {
+		assertTrue(new ArbolGeneral<>().esVacio());
+		assertFalse(new ArbolGeneral<>(null).esVacio());
+		assertFalse(new ArbolGeneral<>(10).esVacio());
+		assertFalse(ag.esVacio());
+	}
+
+	@Test
+	public void testHoja() {
+		assertTrue(new ArbolGeneral<>(10).esHoja());
+		assertTrue(new ArbolGeneral<>(null).esHoja());
+		assertTrue(new ArbolGeneral<>(20, new ListaEnlazadaGenerica<>()).esHoja());
+		assertFalse(ag.esHoja());
+		try {
+			new ArbolGeneral<>().esHoja();
+			fail("No definido en árboles vacíos");
+		}
+		catch(Exception e) {
+		}
+	}
+	
+	@Test
+	public void testTieneHijos() {
+		assertFalse(new ArbolGeneral<>(10).tieneHijos());
+		assertFalse(new ArbolGeneral<>(null).tieneHijos());
+		assertFalse(new ArbolGeneral<>(20, new ListaEnlazadaGenerica<>()).tieneHijos());
+		assertTrue(ag.tieneHijos());
+		try {
+			new ArbolGeneral<>().tieneHijos();
+			fail("No definido en árboles vacíos");
+		}
+		catch(Exception e) {
+		}
 	}
 
 	@Test
@@ -98,7 +132,9 @@ public class ArbolGeneralTestCase {
 		
 		ArbolGeneralExamples<Integer> arbol_examples = new ArbolGeneralExamples<Integer>();
 		assertEquals(esperado, arbol_examples.preorder(this.ag));
+		assertEquals(new ListaEnlazadaGenerica<>(), arbol_examples.preorder(new ArbolGeneral<>()));
 	}
+	
 	@Test
 	public void testPostorder() {
 		//15,10,4,5,2,6,,8,12,13,14,7,3,11
@@ -120,6 +156,30 @@ public class ArbolGeneralTestCase {
 		
 		ArbolGeneralExamples<Integer> arbol_examples = new ArbolGeneralExamples<Integer>();
 		assertEquals(esperado, arbol_examples.posorder(this.ag));
+		assertEquals(new ListaEnlazadaGenerica<>(), arbol_examples.posorder(new ArbolGeneral<>()));
+	}
+	
+	@Test
+	public void testInOrder() {
+		//15,10,4,2,5,1,6,3,8,7,12,13,14,11
+		ListaEnlazadaGenerica<Integer> esperado = new ListaEnlazadaGenerica<Integer>();
+		esperado.agregarFinal(15);
+		esperado.agregarFinal(10);
+		esperado.agregarFinal(4);
+		esperado.agregarFinal(2);
+		esperado.agregarFinal(5);
+		esperado.agregarFinal(1);
+		esperado.agregarFinal(6);
+		esperado.agregarFinal(3);
+		esperado.agregarFinal(8);
+		esperado.agregarFinal(7);
+		esperado.agregarFinal(12);
+		esperado.agregarFinal(13);
+		esperado.agregarFinal(14);
+		esperado.agregarFinal(11);
+		ArbolGeneralExamples<Integer> arbol_examples = new ArbolGeneralExamples<Integer>();
+		assertEquals(esperado, arbol_examples.inorder(this.ag));
+		assertEquals(new ListaEnlazadaGenerica<>(), arbol_examples.inorder(new ArbolGeneral<>()));
 	}
 	
 	@Test
@@ -143,12 +203,26 @@ public class ArbolGeneralTestCase {
 		
 		ArbolGeneralExamples<Integer> arbol_examples = new ArbolGeneralExamples<Integer>();
 		assertEquals(esperado, arbol_examples.porNiveles(this.ag));
+		assertEquals(new ListaEnlazadaGenerica<>(), arbol_examples.porNiveles(new ArbolGeneral<>()));
 	}
 	
 	@Test
 	public void testAltura() {
 		ArbolGeneralExamples<Integer> arbol_examples = new ArbolGeneralExamples<Integer>();
 		assertEquals(4, arbol_examples.altura(this.ag));
+		assertEquals(-1, arbol_examples.altura(new ArbolGeneral<>()));
+		assertEquals(0, arbol_examples.altura(new ArbolGeneral<>(10)));
+	}
+	
+	@Test
+	public void testNivel() {
+		ArbolGeneralExamples<Integer> arbol_examples = new ArbolGeneralExamples<Integer>();
+		assertEquals(-1, arbol_examples.nivel(new ArbolGeneral<>(), 10));
+		assertEquals(0, arbol_examples.nivel(new ArbolGeneral<>(10), 10));
+		assertEquals(0, arbol_examples.nivel(new ArbolGeneral<>(10), 10));
+		assertEquals(0, arbol_examples.nivel(this.ag, 1));
+		assertEquals(1, arbol_examples.nivel(this.ag, 3));
+		assertEquals(3, arbol_examples.nivel(this.ag, 8));
 	}
 
 }
