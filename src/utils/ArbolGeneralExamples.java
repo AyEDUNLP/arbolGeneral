@@ -8,51 +8,60 @@ public class ArbolGeneralExamples<T> {
 	
 	public ListaGenerica<T> preorder(ArbolGeneral<T> arbol){
 		ListaGenerica<T> result = new ListaEnlazadaGenerica<T>();
-		this.preorder_private(arbol, result);
+		this.preorder(arbol, result);
 		return result;
-			
-		}
+	}
 	
-	private void preorder_private(ArbolGeneral<T> arbol, ListaGenerica<T> result) {
+	private void preorder(ArbolGeneral<T> arbol, ListaGenerica<T> result) {
 		if (!arbol.esVacio()){
 			result.agregarFinal(arbol.getDato());
-			
-			if (arbol.tieneHijos()) {
-				
-				ListaGenerica<ArbolGeneral<T>> hijos = arbol.getHijos();
-				hijos.comenzar();
-				while(!hijos.fin()) {
-					ArbolGeneral<T> hijo = hijos.proximo();
-					this.preorder_private(hijo, result);
-				}
-					
+
+			ListaGenerica<ArbolGeneral<T>> hijos = arbol.getHijos();
+			hijos.comenzar();
+			while(!hijos.fin()) {
+				this.preorder(hijos.proximo(), result);
 			}
 		}
-		
 	}
 
 	public ListaGenerica<T> posorder(ArbolGeneral<T> arbol) {
 		ListaGenerica<T> result = new ListaEnlazadaGenerica<T>();
-		this.posorder_private(arbol, result);
+		this.posorder(arbol, result);
 		return result;
 	}
 
-	private void posorder_private(ArbolGeneral<T> arbol, ListaGenerica<T> result) {
-		
-			if (arbol.tieneHijos()) {
-				
-				ListaGenerica<ArbolGeneral<T>> hijos = arbol.getHijos();
-				hijos.comenzar();
-				while(!hijos.fin()) {
-					ArbolGeneral<T> hijo = hijos.proximo();
-					this.posorder_private(hijo, result);
-				}
-					
+	private void posorder(ArbolGeneral<T> arbol, ListaGenerica<T> result) {
+		if (!arbol.esVacio()){
+			ListaGenerica<ArbolGeneral<T>> hijos = arbol.getHijos();
+			hijos.comenzar();
+			while(!hijos.fin()) {
+				this.posorder(hijos.proximo(), result);
 			}
-			if (!arbol.esVacio()){
-				result.agregarFinal(arbol.getDato());
+			result.agregarFinal(arbol.getDato());
+		}
+	}
+
+	public ListaGenerica<T> inorder(ArbolGeneral<T> arbol) {
+		ListaGenerica<T> result = new ListaEnlazadaGenerica<T>();
+		this.inorder(arbol, result);
+		return result;
+	}
+
+	private void inorder(ArbolGeneral<T> arbol, ListaGenerica<T> result) {
+		if (!arbol.esVacio()){
+			ListaGenerica<ArbolGeneral<T>> hijos = arbol.getHijos();
+			hijos.comenzar();
+			
+			if (!hijos.fin()) {
+				this.inorder(hijos.proximo(), result);
 			}
-		
+
+			result.agregarFinal(arbol.getDato());
+
+			while(!hijos.fin()) {
+				this.inorder(hijos.proximo(), result);
+			}
+		}
 	}
 	
 	public ListaGenerica<T> porNiveles(ArbolGeneral<T> arbol) {
@@ -60,14 +69,14 @@ public class ArbolGeneralExamples<T> {
 		ListaGenerica<ArbolGeneral<T>> cola = new ListaEnlazadaGenerica<ArbolGeneral<T>>();
 		ArbolGeneral<T> arbol_encolado;
     	
-    	cola.agregarFinal(arbol);
-    	cola.agregarFinal(null);
+		if (!arbol.esVacio()) {
+
+			cola.agregarFinal(arbol);
     	
-    	while(cola.tamanio()>0) {
-    		arbol_encolado = cola.elemento(1);
-    		cola.eliminarEn(1);
+			while(cola.tamanio()>0) {
+				arbol_encolado = cola.elemento(1);
+				cola.eliminarEn(1);
     		
-    		if (arbol_encolado!=null) {
     			result.agregarFinal(arbol_encolado.getDato());
     			if (arbol_encolado.tieneHijos()) {
     				ListaGenerica<ArbolGeneral<T>> hijos = arbol_encolado.getHijos();
@@ -76,30 +85,41 @@ public class ArbolGeneralExamples<T> {
     					cola.agregarFinal(hijos.proximo());
     				}
     			}
-    			
-    		}else {
-    			if (cola.tamanio()>0)
-    				cola.agregarFinal(null);
-    		}
-    		
-    	}
-    
+			}
+		}
 		return result;
 	}
 	
 	public int altura(ArbolGeneral<T> arbol) {
-		int altura = 0;
-		if (arbol.tieneHijos()) {
+		int altura = -1;
+		if (!arbol.esVacio()) {
 			ListaGenerica<ArbolGeneral<T>> hijos = arbol.getHijos();
 			hijos.comenzar();
 			while(!hijos.fin()) {
 				altura = Math.max(altura, this.altura(hijos.proximo()));
 			}
-		}else {
-			return 0;
+			altura++;
 		}
-		return altura + 1;
-		
+		return altura;
 	}
-
+	
+	public int nivel(ArbolGeneral<T> arbol, T dato) {
+		int nivel = -1;
+		if (!arbol.esVacio()) {
+			if (arbol.getDato().equals(dato)) {
+				nivel = 0;
+			}
+			else {
+				ListaGenerica<ArbolGeneral<T>> hijos = arbol.getHijos();
+				hijos.comenzar();
+				while(!hijos.fin() && nivel == -1) {
+					nivel = this.nivel(hijos.proximo(), dato);
+				}
+				if (nivel > -1) {
+					nivel++;
+				}
+			}
+		}
+		return nivel;
+	}
 }
